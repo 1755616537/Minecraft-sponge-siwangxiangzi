@@ -1,10 +1,11 @@
 package cn.gonjubaike.siwangxiangzi.Util;
 
+import com.google.inject.Inject;
 import ninja.leaping.configurate.ConfigurationNode;
+import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.service.sql.SqlService;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,6 +13,9 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 public class MYSQL {
+    @Inject
+    private Logger logger;
+
     //    172.18.0.2
 //    root
 //    QD564qw
@@ -30,7 +34,7 @@ public class MYSQL {
         ConfigurationNode password = mysql.getNode("storage", "MYSQL", "password");
         ConfigurationNode ssl = mysql.getNode("storage", "MYSQL", "SSL");
 
-        Logger.GetLogger().info("{}{}{}{}{}{}", Logger.QianZhuiMing, database.getString(), host.toString(), user.toString(), password.toString(), ssl.toString());
+        logger.info("{}{}{}{}{}", database.getString(), host.toString(), user.toString(), password.toString(), ssl.toString());
 
         try {
             myMethodThatQueries("jdbc:mysql://"
@@ -39,7 +43,7 @@ public class MYSQL {
                     + "&password=" + password.getString()
                     + "&useUnicode=true&characterEncoding=UTF8&ssl=" + ssl.getString(), "SELECT * FROM ");
         } catch (Exception ignored) {
-            Logger.GetLogger().info("");
+            logger.info("");
         }
     }
 

@@ -1,26 +1,31 @@
 package cn.gonjubaike.siwangxiangzi;
 
 import cn.gonjubaike.siwangxiangzi.Util.Config;
-import cn.gonjubaike.siwangxiangzi.Util.Logger;
 import cn.gonjubaike.siwangxiangzi.Util.MYSQL;
+import cn.gonjubaike.siwangxiangzi.ZhiLing.ZhuCeZhiLing;
 import com.google.inject.Inject;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
-import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
+import org.spongepowered.api.Sponge;
+import org.spongepowered.api.command.args.GenericArguments;
+import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.*;
 import org.spongepowered.api.plugin.Plugin;
-
-import java.io.IOException;
-import java.nio.file.Path;
+import org.slf4j.Logger;
+import org.spongepowered.api.text.Text;
 
 @Plugin(
         id = "siwangxiangzi",
         name = "Siwangxiangzi",
         description = "死亡后会原地生成漂浮的箱子"
 )
+
 public class Siwangxiangzi {
+    @Inject
+    private Logger logger;
+
     //    初始化状态-------------------------------------------------------------
     @Listener
     public void onConstruction(GameConstructionEvent event) {
@@ -40,6 +45,9 @@ public class Siwangxiangzi {
     @Listener
     public void onInitialization(GameInitializationEvent event) {
 //        插件应该完成他所需功能的所有应该完成的准备工作，你应该在这个事件发生时注册监听事件
+
+//        注册指令
+        new ZhuCeZhiLing().RunZhuCeZhiLing();
     }
 
     @Listener
@@ -50,6 +58,8 @@ public class Siwangxiangzi {
     @Listener
     public void onLoadComplete(GameLoadCompleteEvent event) {
 //        所有插件都已准备就绪
+
+        logger.info("[死亡箱子]插件加载完毕！");
     }
 
 
@@ -67,8 +77,6 @@ public class Siwangxiangzi {
     @Listener
     public void onServerStart(GameStartedServerEvent event) {
 //        服务器实例已经可用，世界也已被载入
-
-        Logger.GetLogger().info("{}","[死亡箱子]插件成功运行！");
     }
 
     @Listener
