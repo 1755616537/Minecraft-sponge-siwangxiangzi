@@ -16,7 +16,7 @@ import java.nio.file.Path;
 
 public class Config {
     @Inject
-    private Logger logger;
+    private static Logger logger;
 
     /**
      * 拿到分配好的路径
@@ -84,4 +84,7 @@ public class Config {
         return rootNode;
     }
 
+    public static Logger getLogger() {
+        return logger;
+    }
 }

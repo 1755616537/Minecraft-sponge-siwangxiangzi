@@ -27,7 +27,7 @@ public class MYSQL {
      */
     public void RunMysql() {
         //            读取存储节点信息
-        ConfigurationNode mysql = new Config().GetRootNode().getNode("storage", "MYSQL");
+        ConfigurationNode mysql = Config.GetRootNode().getNode("storage", "MYSQL");
         ConfigurationNode database = mysql.getNode("storage", "MYSQL", "database");
         ConfigurationNode host = mysql.getNode("storage", "MYSQL", "host");
         ConfigurationNode user = mysql.getNode("storage", "MYSQL", "user");
