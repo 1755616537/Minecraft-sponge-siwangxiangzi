@@ -19,38 +19,33 @@ public class Config {
      */
     @Inject
     @DefaultConfig(sharedRoot = false)
-    public static Path privateConfigDir;
-
+    private Path privateConfigDir;
     private ConfigurationLoader<CommentedConfigurationNode> loader;
-    public static ConfigurationNode rootNode;
+    private ConfigurationNode rootNode;
 
     /**
      * 初始化配置
      */
     public void RunConfig() {
-        loader = HoconConfigurationLoader.builder().setPath(Config.privateConfigDir).build();
+        loader = HoconConfigurationLoader.builder().setPath(privateConfigDir).build();
         try {
 //            加载节点信息
             rootNode = loader.load();
         } catch (IOException e) {
-            Logger.getLogger().info("[死亡箱子]初始化配置失败！");
+            Logger.GetLogger().info("[死亡箱子]初始化配置失败！");
         }
     }
 
-    /**
-     * 获取配置
-     */
-    public void GetConfig(){
-
+    public Path GetPrivateConfigDir() {
+        return this.privateConfigDir;
     }
 
-    public void SetConfig() {
-        try {
-//                获取一个空的 ConfigurationNode
-            ConfigurationNode rootNode = loader.createEmptyNode(ConfigurationOptions.defaults());
-            loader.save(rootNode);
-        } catch (IOException e2) {
-            Logger.getLogger().info("[死亡箱子]保存配置文件失败！");
-        }
+    public ConfigurationLoader<CommentedConfigurationNode> GetLoader() {
+        return this.loader;
     }
+
+    public ConfigurationNode GetRootNode() {
+        return this.rootNode;
+    }
+
 }

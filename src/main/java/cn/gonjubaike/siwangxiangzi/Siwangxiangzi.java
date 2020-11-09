@@ -35,7 +35,6 @@ public class Siwangxiangzi {
         new Config().RunConfig();
 //        初始化数据库
         new MYSQL().RunMysql();
-
     }
 
     @Listener
@@ -66,10 +65,10 @@ public class Siwangxiangzi {
     }
 
     @Listener
-    public void onServerStart(GameStartedServerEvent event) throws Exception {
+    public void onServerStart(GameStartedServerEvent event) {
 //        服务器实例已经可用，世界也已被载入
 
-        Logger.getLogger().info("[死亡箱子]插件成功运行！");
+        Logger.GetLogger().info("{}","[死亡箱子]插件成功运行！");
     }
 
     @Listener

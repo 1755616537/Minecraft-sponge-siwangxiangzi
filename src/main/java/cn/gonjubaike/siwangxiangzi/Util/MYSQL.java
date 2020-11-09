@@ -4,45 +4,68 @@ import ninja.leaping.configurate.ConfigurationNode;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.service.sql.SqlService;
 
+import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
 public class MYSQL {
-//    172.18.0.2
+    //    172.18.0.2
 //    root
 //    QD564qw
     private SqlService sql;
+    private String jdbcUrl;
 
     /**
      * 初始化数据库连接
      */
-    public void RunMysql(){
+    public void RunMysql() {
         //            读取存储节点信息
-        ConfigurationNode mysql = Config.rootNode.getNode("storage", "MYSQL");
+        ConfigurationNode mysql = new Config().GetRootNode().getNode("storage", "MYSQL");
         ConfigurationNode database = mysql.getNode("storage", "MYSQL", "database");
         ConfigurationNode host = mysql.getNode("storage", "MYSQL", "host");
         ConfigurationNode user = mysql.getNode("storage", "MYSQL", "user");
         ConfigurationNode password = mysql.getNode("storage", "MYSQL", "password");
         ConfigurationNode ssl = mysql.getNode("storage", "MYSQL", "SSL");
 
-        Logger.getLogger().info("[死亡箱子]", database.getString(), host.toString(), user.toString(), password.toString(), ssl.toString());
+        Logger.GetLogger().info("{}{}{}{}{}{}", Logger.QianZhuiMing, database.getString(), host.toString(), user.toString(), password.toString(), ssl.toString());
+
+        try {
+            myMethodThatQueries("jdbc:mysql://"
+                    + host.getString() + "/" + database.getString()
+                    + "?user=" + user.getString()
+                    + "&password=" + password.getString()
+                    + "&useUnicode=true&characterEncoding=UTF8&ssl=" + ssl.getString(), "SELECT * FROM ");
+        } catch (Exception ignored) {
+            Logger.GetLogger().info("");
+        }
     }
 
     public javax.sql.DataSource getDataSource(String jdbcUrl) throws SQLException {
         if (sql == null) {
-            sql = Sponge.getServiceManager().provide(SqlService.class).get();
+            Optional<SqlService> sqlService = Sponge.getServiceManager().provide(SqlService.class);
+            sqlService.ifPresent(service -> sql = service);
         }
         return sql.getDataSource(jdbcUrl);
     }
 
-    // Later on
-    public void myMethodThatQueries() throws SQLException {
-        Connection conn = getDataSource("jdbc:h2:imalittledatabaseshortandstout.db").getConnection();
-        try {
-            conn.prepareStatement("SELECT * FROM test_tbl").execute();
-        } finally {
-            conn.close();
-        }
+    public void myMethodThatQueries(String uri, String sql) {
+        jdbcUrl = uri;
 
+        try (Connection conn = getDataSource(uri).getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet results = stmt.executeQuery()) {
+            while (results.next()) {
+
+            }
+        } catch (Exception ignored) {
+
+        }
+    }
+
+    public void myMethodThatQueries(String sql) {
+        myMethodThatQueries(jdbcUrl, sql);
     }
 }
