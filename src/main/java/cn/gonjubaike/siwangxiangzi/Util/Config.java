@@ -1,7 +1,9 @@
 package cn.gonjubaike.siwangxiangzi.Util;
 
 import com.google.inject.Inject;
+import javafx.animation.RotateTransition;
 import ninja.leaping.configurate.ConfigurationNode;
+import ninja.leaping.configurate.ConfigurationOptions;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
@@ -19,28 +21,36 @@ public class Config {
     @DefaultConfig(sharedRoot = false)
     public static Path privateConfigDir;
 
+    private ConfigurationLoader<CommentedConfigurationNode> loader;
+    public static ConfigurationNode rootNode;
+
     /**
      * 初始化配置
      */
-    public void RunConfig(){
-        ConfigurationLoader<CommentedConfigurationNode> loader = HoconConfigurationLoader.builder().setPath(Config.privateConfigDir).build();
-//        ConfigurationNode rootNode = loader.createEmptyNode(ConfigurationOptions.defaults());
-        ConfigurationNode rootNode;
+    public void RunConfig() {
+        loader = HoconConfigurationLoader.builder().setPath(Config.privateConfigDir).build();
         try {
 //            加载节点信息
             rootNode = loader.load();
-//            读取存储节点信息
-            ConfigurationNode mysql = rootNode.getNode("storage", "MYSQL");
-            ConfigurationNode database = mysql.getNode("storage", "MYSQL", "database");
-            ConfigurationNode host = mysql.getNode("storage", "MYSQL", "host");
-            ConfigurationNode user = mysql.getNode("storage", "MYSQL", "user");
-            ConfigurationNode password = mysql.getNode("storage", "MYSQL", "password");
-            ConfigurationNode ssl = mysql.getNode("storage", "MYSQL", "SSL");
+        } catch (IOException e) {
+            Logger.getLogger().info("[死亡箱子]初始化配置失败！");
+        }
+    }
 
-            logger.info("[死亡箱子]",database.getString(),host.toString(),user.toString(),password.toString(),ssl.toString());
-        } catch(IOException e) {
-            // error
-            logger.info("[死亡箱子]配置文件读取失败！");
+    /**
+     * 获取配置
+     */
+    public void GetConfig(){
+
+    }
+
+    public void SetConfig() {
+        try {
+//                获取一个空的 ConfigurationNode
+            ConfigurationNode rootNode = loader.createEmptyNode(ConfigurationOptions.defaults());
+            loader.save(rootNode);
+        } catch (IOException e2) {
+            Logger.getLogger().info("[死亡箱子]保存配置文件失败！");
         }
     }
 }

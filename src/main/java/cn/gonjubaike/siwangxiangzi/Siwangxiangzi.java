@@ -2,6 +2,7 @@ package cn.gonjubaike.siwangxiangzi;
 
 import cn.gonjubaike.siwangxiangzi.Util.Config;
 import cn.gonjubaike.siwangxiangzi.Util.Logger;
+import cn.gonjubaike.siwangxiangzi.Util.MYSQL;
 import com.google.inject.Inject;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
@@ -30,9 +31,10 @@ public class Siwangxiangzi {
     public void onPreInitialization(GamePreInitializationEvent event) {
 //        插件准备进行初始化，这时默认的 Logger 已经准备好被调用，同时你也可以开始引用配置文件中的内容
 
-//        读取配置
-
-//        连接数据库
+//        初始化配置
+        new Config().RunConfig();
+//        初始化数据库
+        new MYSQL().RunMysql();
 
     }
 

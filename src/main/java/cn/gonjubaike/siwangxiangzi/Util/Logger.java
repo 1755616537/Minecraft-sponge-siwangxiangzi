@@ -4,9 +4,9 @@ import com.google.inject.Inject;
 
 public class Logger {
     @Inject
-    private org.slf4j.Logger logger;
+    private static org.slf4j.Logger logger;
 
-    public void getLogger(String ...data) {
-        logger.info(data...);
+    public static org.slf4j.Logger getLogger() {
+        return logger;
     }
 }
