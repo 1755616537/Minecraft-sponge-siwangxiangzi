@@ -14,3 +14,5 @@ dependencies {
 }
 
 sponge.plugin.id = 'siwangxiangzi'
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
