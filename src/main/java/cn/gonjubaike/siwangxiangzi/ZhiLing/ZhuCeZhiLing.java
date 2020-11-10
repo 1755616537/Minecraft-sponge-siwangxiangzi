@@ -7,16 +7,7 @@ import org.spongepowered.api.text.Text;
 
 public class ZhuCeZhiLing {
 //    注册指令
-    public void RunZhuCeZhiLing(){
-        CommandSpec setHome = CommandSpec.builder()
-                .description(Text.of("设置一个家（重复设置可替换）"))
-                .arguments(
-                        GenericArguments.remainingJoinedStrings(Text.of("name"))
-                )
-                .executor(new SetHomeCommand())
-                .build();
-        Sponge.getCommandManager().register(this, setHome, "sethome");
+    public void RunZhuCeZhiLing(Object plugin){
+        Sponge.getCommandManager().register(plugin,help.base(),"abc");
     }
-
-
 }

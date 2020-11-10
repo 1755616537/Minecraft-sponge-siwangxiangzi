@@ -15,7 +15,7 @@ import java.util.Optional;
 public class MYSQL {
     @Inject
     private Logger logger;
-    
+
     private SqlService sql;
     private String jdbcUrl;
 
@@ -25,20 +25,26 @@ public class MYSQL {
     public void RunMysql() {
         //            读取存储节点信息
         ConfigurationNode mysql = Config.getConfNode().getNode("storage", "MYSQL");
-        ConfigurationNode database = mysql.getNode("storage", "MYSQL", "database");
-        ConfigurationNode host = mysql.getNode("storage", "MYSQL", "host");
-        ConfigurationNode user = mysql.getNode("storage", "MYSQL", "user");
-        ConfigurationNode password = mysql.getNode("storage", "MYSQL", "password");
-        ConfigurationNode ssl = mysql.getNode("storage", "MYSQL", "SSL");
+        ConfigurationNode database = mysql.getNode("database");
+        ConfigurationNode host = mysql.getNode("host");
+        ConfigurationNode user = mysql.getNode("user");
+        ConfigurationNode password = mysql.getNode("password");
+        ConfigurationNode ssl = mysql.getNode("SSL");
 
-        logger.info("{}{}{}{}{}", database.getString(), host.toString(), user.toString(), password.toString(), ssl.toString());
+        logger.info("{}{}{}{}{}",
+                database.getString(),
+                host.getString(),
+                user.getString(),
+                password.getString(),
+                ssl.getBoolean()
+        );
 
         try {
             myMethodThatQueries("jdbc:mysql://"
                     + host.getString() + "/" + database.getString()
                     + "?user=" + user.getString()
                     + "&password=" + password.getString()
-                    + "&useUnicode=true&characterEncoding=UTF8&ssl=" + ssl.getString(), "SELECT * FROM ");
+                    + "&useUnicode=true&characterEncoding=UTF8&ssl=" + ssl.getBoolean(), "SELECT * FROM ");
         } catch (Exception ignored) {
             logger.info("");
         }

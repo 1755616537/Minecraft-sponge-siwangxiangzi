@@ -1,6 +1,8 @@
 package cn.gonjubaike.siwangxiangzi;
 
 import cn.gonjubaike.siwangxiangzi.Util.Config;
+import cn.gonjubaike.siwangxiangzi.Util.MYSQL;
+import cn.gonjubaike.siwangxiangzi.ZhiLing.ZhuCeZhiLing;
 import com.google.inject.Inject;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
@@ -56,7 +58,7 @@ public class Siwangxiangzi {
         config.setup(ConfigFile,ConfigManager,ConfigCatalog);
         config.RunConfig();
 //        初始化数据库
-//        new MYSQL().RunMysql();
+        new MYSQL().RunMysql();
     }
 
     @Listener
@@ -64,7 +66,7 @@ public class Siwangxiangzi {
 //        插件应该完成他所需功能的所有应该完成的准备工作，你应该在这个事件发生时注册监听事件
 
 //        注册指令
-//        new ZhuCeZhiLing().RunZhuCeZhiLing();
+        new ZhuCeZhiLing().RunZhuCeZhiLing(this);
     }
 
     @Listener
