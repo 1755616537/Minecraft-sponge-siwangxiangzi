@@ -30,21 +30,13 @@ public class MYSQL {
         String password = mysql.getNode("password").getString();
         String ssl = mysql.getNode("SSL").getString();
 
-        System.out.println(database);
-        System.out.println(host);
-        System.out.println(user);
-        System.out.println(password);
-        System.out.println(ssl);
-
         try {
             myMethodThatQueries("jdbc:mysql://"
                     + host + "/" + database
-//                    + "?user=" + user
-//                    + "&password=" + password
                     + "?useUnicode=true&characterEncoding=UTF8&useSSL=" + ssl,user,password,
                     "SELECT * FROM ");
         } catch (Exception ignored) {
-            logger.info("");
+            logger.info("[死亡箱子]插件,数据库连接失败");
         }
     }
 
