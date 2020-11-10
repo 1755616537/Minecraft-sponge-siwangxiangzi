@@ -10,11 +10,16 @@ import ninja.leaping.configurate.loader.ConfigurationLoader;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandSpec;
+import org.spongepowered.api.config.ConfigDir;
+import org.spongepowered.api.config.DefaultConfig;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.*;
 import org.spongepowered.api.plugin.Plugin;
 import org.slf4j.Logger;
 import org.spongepowered.api.text.Text;
+
+import java.io.File;
+import java.nio.file.Path;
 
 @Plugin(
         id = "siwangxiangzi",
@@ -25,6 +30,24 @@ import org.spongepowered.api.text.Text;
 public class Siwangxiangzi {
     @Inject
     private Logger logger;
+
+    /**
+     * 拿到分配好的文件路径
+     */
+    @Inject
+    @DefaultConfig(sharedRoot = true)
+    private File ConfigFile;
+
+    @Inject
+    @DefaultConfig(sharedRoot = true)
+    private ConfigurationLoader<CommentedConfigurationNode> ConfigManager;
+
+    /**
+     * 拿到分配好的文件夹路径
+     */
+    @Inject
+    @ConfigDir(sharedRoot = false)
+    private File ConfigCatalog;
 
     //    初始化状态-------------------------------------------------------------
     @Listener
@@ -37,9 +60,12 @@ public class Siwangxiangzi {
 //        插件准备进行初始化，这时默认的 Logger 已经准备好被调用，同时你也可以开始引用配置文件中的内容
 
 //        初始化配置
-        new Config().RunConfig();
+        Config config=new Config();
+        config.setup(ConfigFile,ConfigManager,ConfigCatalog);
+        config.load();
+//        config.RunConfig();
 //        初始化数据库
-        new MYSQL().RunMysql();
+//        new MYSQL().RunMysql();
     }
 
     @Listener
@@ -47,7 +73,7 @@ public class Siwangxiangzi {
 //        插件应该完成他所需功能的所有应该完成的准备工作，你应该在这个事件发生时注册监听事件
 
 //        注册指令
-        new ZhuCeZhiLing().RunZhuCeZhiLing();
+//        new ZhuCeZhiLing().RunZhuCeZhiLing();
     }
 
     @Listener
@@ -99,5 +125,10 @@ public class Siwangxiangzi {
     @Listener
     public void onStopped(GameStoppedEvent event) {
 //        Minecraft 将会立即关闭，此时插件不应跟游戏进行任何交互
+    }
+
+
+    public Logger getLogger() {
+        return logger;
     }
 }
