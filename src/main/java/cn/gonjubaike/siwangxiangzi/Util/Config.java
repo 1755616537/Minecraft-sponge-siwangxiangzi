@@ -25,6 +25,8 @@ public class Config {
         if (ConfigFile==null || ConfigManager==null || ConfigCatalog==null){
             throw new Exception("请先执行setup初始化值");
         }
+
+//        ------------------------------------------------------------------------
         try {
             if (!ConfigFile.exists()) {
 //                创建文件
@@ -42,6 +44,7 @@ public class Config {
             e.printStackTrace();
         }
 
+//        ------------------------------------------------------------------------
         //            创建配置目录
         if (!ConfigCatalog.exists()){
             ConfigCatalog.mkdir();
@@ -59,7 +62,7 @@ public class Config {
                 configConfNode.getNode("storage","MYSQL","host").setValue("0.0.0.0:3306");
                 configConfNode.getNode("storage","MYSQL","user").setValue("用户名");
                 configConfNode.getNode("storage","MYSQL","password").setValue("密码");
-                configConfNode.getNode("storage","MYSQL","SSL").setValue(false);
+                configConfNode.getNode("storage","MYSQL","SSL").setValue("false");
 //                保存数据
                 loader.save(configConfNode);
             }else {

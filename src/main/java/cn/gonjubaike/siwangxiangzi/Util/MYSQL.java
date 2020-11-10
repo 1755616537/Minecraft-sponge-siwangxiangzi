@@ -6,10 +6,7 @@ import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.service.sql.SqlService;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Optional;
 
 public class MYSQL {
@@ -18,33 +15,34 @@ public class MYSQL {
 
     private SqlService sql;
     private String jdbcUrl;
+    private String User;
+    private String Password;
 
     /**
      * 初始化数据库连接
      */
     public void RunMysql() {
         //            读取存储节点信息
-        ConfigurationNode mysql = Config.getConfNode().getNode("storage", "MYSQL");
-        ConfigurationNode database = mysql.getNode("database");
-        ConfigurationNode host = mysql.getNode("host");
-        ConfigurationNode user = mysql.getNode("user");
-        ConfigurationNode password = mysql.getNode("password");
-        ConfigurationNode ssl = mysql.getNode("SSL");
+        ConfigurationNode mysql = Config.getConfigConfNode().getNode("storage", "MYSQL");
+        String database = mysql.getNode("database").getString();
+        String host = mysql.getNode("host").getString();
+        String user = mysql.getNode("user").getString();
+        String password = mysql.getNode("password").getString();
+        String ssl = mysql.getNode("SSL").getString();
 
-        logger.info("{}{}{}{}{}",
-                database.getString(),
-                host.getString(),
-                user.getString(),
-                password.getString(),
-                ssl.getBoolean()
-        );
+        System.out.println(database);
+        System.out.println(host);
+        System.out.println(user);
+        System.out.println(password);
+        System.out.println(ssl);
 
         try {
             myMethodThatQueries("jdbc:mysql://"
-                    + host.getString() + "/" + database.getString()
-                    + "?user=" + user.getString()
-                    + "&password=" + password.getString()
-                    + "&useUnicode=true&characterEncoding=UTF8&ssl=" + ssl.getBoolean(), "SELECT * FROM ");
+                    + host + "/" + database
+//                    + "?user=" + user
+//                    + "&password=" + password
+                    + "?useUnicode=true&characterEncoding=UTF8&useSSL=" + ssl,user,password,
+                    "SELECT * FROM ");
         } catch (Exception ignored) {
             logger.info("");
         }
@@ -58,10 +56,12 @@ public class MYSQL {
         return sql.getDataSource(jdbcUrl);
     }
 
-    public void myMethodThatQueries(String uri, String sql) {
+    public void myMethodThatQueries(String uri,String user,String password, String sql) {
         jdbcUrl = uri;
+        User=user;
+        Password=password;
 
-        try (Connection conn = getDataSource(uri).getConnection();
+        try (Connection conn = DriverManager.getConnection(uri,user,password);
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet results = stmt.executeQuery()) {
             while (results.next()) {
@@ -73,6 +73,6 @@ public class MYSQL {
     }
 
     public void myMethodThatQueries(String sql) {
-        myMethodThatQueries(jdbcUrl, sql);
+        myMethodThatQueries(jdbcUrl,User,Password, sql);
     }
 }
