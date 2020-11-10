@@ -17,10 +17,10 @@ import java.io.IOException;
 
 
 public class SetHomeCommand implements CommandExecutor {
-    ConfigurationNode rootNode = Config.GetRootNode();
+    ConfigurationNode rootNode = Config.getConfNode();
     ConfigurationNode homeRoot = rootNode.getNode("homes");
     ConfigurationNode homeList = rootNode.getNode("homeList");
-    ConfigurationLoader<CommentedConfigurationNode> loader = Config.GetLoader();
+    ConfigurationLoader<CommentedConfigurationNode> loader = Config.getLoader();
 
     @Override
     public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {

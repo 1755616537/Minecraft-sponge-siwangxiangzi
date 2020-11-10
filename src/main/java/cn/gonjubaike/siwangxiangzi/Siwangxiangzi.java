@@ -1,25 +1,17 @@
 package cn.gonjubaike.siwangxiangzi;
 
 import cn.gonjubaike.siwangxiangzi.Util.Config;
-import cn.gonjubaike.siwangxiangzi.Util.MYSQL;
-import cn.gonjubaike.siwangxiangzi.ZhiLing.ZhuCeZhiLing;
 import com.google.inject.Inject;
-import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
-import org.spongepowered.api.Sponge;
-import org.spongepowered.api.command.args.GenericArguments;
-import org.spongepowered.api.command.spec.CommandSpec;
+import org.slf4j.Logger;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.config.DefaultConfig;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.*;
 import org.spongepowered.api.plugin.Plugin;
-import org.slf4j.Logger;
-import org.spongepowered.api.text.Text;
 
 import java.io.File;
-import java.nio.file.Path;
 
 @Plugin(
         id = "siwangxiangzi",
@@ -56,14 +48,13 @@ public class Siwangxiangzi {
     }
 
     @Listener
-    public void onPreInitialization(GamePreInitializationEvent event) {
+    public void onPreInitialization(GamePreInitializationEvent event) throws Exception {
 //        插件准备进行初始化，这时默认的 Logger 已经准备好被调用，同时你也可以开始引用配置文件中的内容
 
 //        初始化配置
         Config config=new Config();
         config.setup(ConfigFile,ConfigManager,ConfigCatalog);
-        config.load();
-//        config.RunConfig();
+        config.RunConfig();
 //        初始化数据库
 //        new MYSQL().RunMysql();
     }

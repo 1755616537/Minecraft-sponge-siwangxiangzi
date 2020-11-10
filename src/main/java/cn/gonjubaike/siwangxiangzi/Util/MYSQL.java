@@ -15,10 +15,7 @@ import java.util.Optional;
 public class MYSQL {
     @Inject
     private Logger logger;
-
-    //    172.18.0.2
-//    root
-//    QD564qw
+    
     private SqlService sql;
     private String jdbcUrl;
 
@@ -27,7 +24,7 @@ public class MYSQL {
      */
     public void RunMysql() {
         //            读取存储节点信息
-        ConfigurationNode mysql = Config.GetRootNode().getNode("storage", "MYSQL");
+        ConfigurationNode mysql = Config.getConfNode().getNode("storage", "MYSQL");
         ConfigurationNode database = mysql.getNode("storage", "MYSQL", "database");
         ConfigurationNode host = mysql.getNode("storage", "MYSQL", "host");
         ConfigurationNode user = mysql.getNode("storage", "MYSQL", "user");

@@ -1,112 +1,30 @@
 package cn.gonjubaike.siwangxiangzi.Util;
 
-import cn.gonjubaike.siwangxiangzi.Siwangxiangzi;
-import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
 
 
 public class Config {
 
     private static File ConfigFile;
     private static ConfigurationLoader<CommentedConfigurationNode> ConfigManager;
-    private static File ConfigCatalog;
-
-    private static ConfigurationLoader<CommentedConfigurationNode> loader;
     private static CommentedConfigurationNode confNode;
 
-    private static ConfigurationNode rootNode = null;
+    private static File ConfigCatalog;
+    private static ConfigurationLoader<CommentedConfigurationNode> loader;
+    private static CommentedConfigurationNode configConfNode;
 
     /**
      * 初始化配置
      */
-    public void RunConfig() {
-        loader = HoconConfigurationLoader.builder()
-                .setFile(ConfigFile)
-                .build();
-
-        System.out.println("------------------------------成功");
-
-        CommentedConfigurationNode root;
-        try {
-            root = loader.load();
-        } catch (IOException e) {
-            System.err.println("An error occurred while loading this configuration: " + e.getMessage());
-            if (e.getCause() != null) {
-                e.getCause().printStackTrace();
-            }
-            System.exit(1);
-            return;
+    public void RunConfig() throws Exception {
+        if (ConfigFile==null || ConfigManager==null || ConfigCatalog==null){
+            throw new Exception("请先执行setup初始化值");
         }
-
-        ConfigurationNode countNode = root.getNode("messages", "count"),
-                moodNode = root.getNode("messages", "mood");
-
-        String name = root.getNode("name").getString();
-        int count = countNode.getInt(Integer.MIN_VALUE);
-
-        if (name == null || count == Integer.MIN_VALUE) {
-            System.err.println("Invalid configuration");
-            System.exit(2);
-            return;
-        }
-
-        System.out.println("Hello, " + name + "!");
-        System.out.println("Thanks for viewing your messages");
-
-        // Update values
-        countNode.setValue(0);
-
-        root.getNode("accesses").act(n -> { // perform actions with the node at key "accesses" available at `n`
-            n.appendListNode().setValue(System.currentTimeMillis());
-        });
-
-
-//        try{
-//            //        获取配置加载器
-//            loader = HoconConfigurationLoader.builder().setPath(siwangxiangzi.getGetConfigFile()).build();
-//        }catch (Exception ignored){
-////            初始化默认配置文件
-//            try {
-//                new Siwangxiangzi().getGetConfigFile().toFile().createNewFile();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-////        获取一个空的 ConfigurationNode
-//        ConfigurationNode rootNode2 = loader.createEmptyNode(ConfigurationOptions.defaults());
-//        try {
-////            加载节点信息
-//            rootNode = loader.load();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            new Siwangxiangzi().getLogger().info("[死亡箱子]初始化配置失败！");
-//            try {
-//                loader.save(rootNode);
-//            } catch(IOException e2) {
-//                // handle error
-//            }
-//        }
-    }
-
-    /**
-     * 初始化值
-     */
-    public void setup(File configFile, ConfigurationLoader<CommentedConfigurationNode> configManager, File configCatalog) {
-        ConfigFile = configFile;
-        ConfigManager = configManager;
-        ConfigCatalog = configCatalog;
-    }
-
-    /**
-     * 初始化文件
-     */
-    public void load() {
         try {
             if (!ConfigFile.exists()) {
 //                创建文件
@@ -130,7 +48,6 @@ public class Config {
         }
         File config=new File(ConfigCatalog,"config.conf");
         loader = HoconConfigurationLoader.builder().setFile(config).build();
-        CommentedConfigurationNode configConfNode;
         try {
             if (!config.exists()) {
 //                创建文件
@@ -138,10 +55,10 @@ public class Config {
 //                读入文件
                 configConfNode = loader.load();
 //                添加数据
-                configConfNode.getNode("storage","MYSQL","database").setValue("siwangxiangzi");
+                configConfNode.getNode("storage","MYSQL","database").setValue("表名");
                 configConfNode.getNode("storage","MYSQL","host").setValue("0.0.0.0:3306");
-                configConfNode.getNode("storage","MYSQL","user").setValue("");
-                configConfNode.getNode("storage","MYSQL","password").setValue("");
+                configConfNode.getNode("storage","MYSQL","user").setValue("用户名");
+                configConfNode.getNode("storage","MYSQL","password").setValue("密码");
                 configConfNode.getNode("storage","MYSQL","SSL").setValue(false);
 //                保存数据
                 loader.save(configConfNode);
@@ -155,11 +72,36 @@ public class Config {
         }
     }
 
-    public static ConfigurationLoader<CommentedConfigurationNode> GetLoader() {
+    /**
+     * 初始化值
+     */
+    public void setup(File configFile, ConfigurationLoader<CommentedConfigurationNode> configManager, File configCatalog) {
+        ConfigFile = configFile;
+        ConfigManager = configManager;
+        ConfigCatalog = configCatalog;
+    }
+
+    public static CommentedConfigurationNode getConfigConfNode() {
+        return configConfNode;
+    }
+
+    public static CommentedConfigurationNode getConfNode() {
+        return confNode;
+    }
+
+    public static ConfigurationLoader<CommentedConfigurationNode> getConfigManager() {
+        return ConfigManager;
+    }
+
+    public static ConfigurationLoader<CommentedConfigurationNode> getLoader() {
         return loader;
     }
 
-    public static ConfigurationNode GetRootNode() {
-        return rootNode;
+    public static File getConfigCatalog() {
+        return ConfigCatalog;
+    }
+
+    public static File getConfigFile() {
+        return ConfigFile;
     }
 }
