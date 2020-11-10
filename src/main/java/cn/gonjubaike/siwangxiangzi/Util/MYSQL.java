@@ -1,5 +1,6 @@
 package cn.gonjubaike.siwangxiangzi.Util;
 
+import cn.gonjubaike.siwangxiangzi.Siwangxiangzi;
 import com.google.inject.Inject;
 import ninja.leaping.configurate.ConfigurationNode;
 import org.slf4j.Logger;
@@ -10,9 +11,6 @@ import java.sql.*;
 import java.util.Optional;
 
 public class MYSQL {
-    @Inject
-    private Logger logger;
-
     private SqlService sql;
     private String jdbcUrl;
     private String User;
@@ -31,12 +29,11 @@ public class MYSQL {
         String ssl = mysql.getNode("SSL").getString();
 
         try {
-            myMethodThatQueries("jdbc:mysql://"
-                    + host + "/" + database
-                    + "?useUnicode=true&characterEncoding=UTF8&useSSL=" + ssl,user,password,
+            myMethodThatQueries("jdbc:mysql://"+user+":"+password+"@" + host + "/" + database
+                    + "?password="+password+"&useUnicode=true&characterEncoding=UTF8&useSSL=" + ssl,
                     "SELECT * FROM ");
         } catch (Exception ignored) {
-            logger.info("[死亡箱子]插件,数据库连接失败");
+            new Siwangxiangzi().getLogger().info("[死亡箱子]插件,数据库连接失败");
         }
     }
 
@@ -48,23 +45,20 @@ public class MYSQL {
         return sql.getDataSource(jdbcUrl);
     }
 
-    public void myMethodThatQueries(String uri,String user,String password, String sql) {
+    public void myMethodThatQueries(String uri, String sql) throws SQLException {
         jdbcUrl = uri;
-        User=user;
-        Password=password;
 
-        try (Connection conn = DriverManager.getConnection(uri,user,password);
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet results = stmt.executeQuery()) {
-            while (results.next()) {
+        System.out.println(uri);
 
-            }
-        } catch (Exception ignored) {
-
-        }
+        Connection conn = getDataSource(uri).getConnection();
+//        PreparedStatement stmt = conn.prepareStatement(sql);
+//        ResultSet results = stmt.executeQuery();
+//        while (results.next()) {
+//
+//        }
     }
 
-    public void myMethodThatQueries(String sql) {
-        myMethodThatQueries(jdbcUrl,User,Password, sql);
+    public void myMethodThatQueries(String sql) throws SQLException {
+        myMethodThatQueries(jdbcUrl, sql);
     }
 }
