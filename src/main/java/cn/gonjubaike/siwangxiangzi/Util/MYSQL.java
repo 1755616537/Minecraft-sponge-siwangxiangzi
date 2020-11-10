@@ -29,9 +29,9 @@ public class MYSQL {
         String ssl = mysql.getNode("SSL").getString();
 
         try {
-            myMethodThatQueries("jdbc:mysql://"+user+":"+password+"@" + host + "/" + database
-                    + "?password="+password+"&useUnicode=true&characterEncoding=UTF8&useSSL=" + ssl,
-                    "SELECT * FROM ");
+            myMethodThatQueries("jdbc:mysql://[root[:QD564qw]@]"+host + "/" + database
+                    + "?&useUnicode=true&characterEncoding=UTF8&useSSL=" + ssl,
+                    "SELECT * FROM "+database);
         } catch (Exception ignored) {
             new Siwangxiangzi().getLogger().info("[死亡箱子]插件,数据库连接失败");
         }
