@@ -108,20 +108,21 @@ public class Config {
      */
     public void load() {
         try {
-//            创建配置文件
             if (!ConfigFile.exists()) {
+//                创建文件
                 ConfigFile.createNewFile();
+//                读入文件
                 confNode = ConfigManager.load();
+//                保存文件
                 ConfigManager.save(confNode);
+            }else {
+//                读入文件
+                confNode = ConfigManager.load();
             }
-            confNode = ConfigManager.load();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-//        添加数据
-        addValue();
 
         //            创建配置目录
         if (!ConfigCatalog.exists()){
@@ -131,25 +132,24 @@ public class Config {
         loader = HoconConfigurationLoader.builder().setFile(config).build();
         CommentedConfigurationNode configConfNode;
         try {
-//            创建配置文件
             if (!config.exists()) {
+//                创建文件
                 config.createNewFile();
+//                读入文件
                 configConfNode = loader.load();
+//                添加数据
+                configConfNode.getNode("storage","MYSQL","database").setValue("siwangxiangzi");
+                configConfNode.getNode("storage","MYSQL","host").setValue("0.0.0.0:3306");
+                configConfNode.getNode("storage","MYSQL","user").setValue("");
+                configConfNode.getNode("storage","MYSQL","password").setValue("");
+                configConfNode.getNode("storage","MYSQL","SSL").setValue(false);
+//                保存数据
                 loader.save(configConfNode);
+            }else {
+//                读入文件
+                configConfNode = loader.load();
             }
-            configConfNode = loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
-    /**
-     * 添加值
-     */
-    public void addValue(){
-        confNode.getNode("storage","MYSQL","database").setValue("3306");
-        try {
-            ConfigManager.save(confNode);
         } catch (IOException e) {
             e.printStackTrace();
         }
