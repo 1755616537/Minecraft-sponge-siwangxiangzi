@@ -122,6 +122,6 @@ public class Siwangxiangzi {
 
 
     public Logger getLogger() {
-        return logger;
+        return this.logger;
     }
 }

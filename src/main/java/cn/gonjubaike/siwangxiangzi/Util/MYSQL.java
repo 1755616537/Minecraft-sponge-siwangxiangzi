@@ -16,6 +16,9 @@ public class MYSQL {
     private String User;
     private String Password;
 
+    @Inject
+    private Logger logger;
+
     /**
      * 初始化数据库连接
      */
@@ -29,28 +32,35 @@ public class MYSQL {
         String ssl = mysql.getNode("SSL").getString();
 
         try {
-            myMethodThatQueries("jdbc:mysql://[root[:QD564qw]@]"+host + "/" + database
-                    + "?&useUnicode=true&characterEncoding=UTF8&useSSL=" + ssl,
+            myMethodThatQueries("jdbc:mysql://QD564qw@172.18.0.2:3306/test",
                     "SELECT * FROM "+database);
+//            jdbc:<mysql>://[<root>[:<QD564qw>]@]<172.18.0.2:3306 >/<test>
         } catch (Exception ignored) {
-            new Siwangxiangzi().getLogger().info("[死亡箱子]插件,数据库连接失败");
+//            logger.info("[死亡箱子]插件,数据库连接失败");
+            System.out.println(ignored);
+            System.out.println("[死亡箱子]插件,数据库连接失败");
         }
     }
 
     public javax.sql.DataSource getDataSource(String jdbcUrl) throws SQLException {
-        if (sql == null) {
-            Optional<SqlService> sqlService = Sponge.getServiceManager().provide(SqlService.class);
-            sqlService.ifPresent(service -> sql = service);
-        }
+//        if (sql == null) {
+//        Optional<SqlService> sqlService = Sponge.getServiceManager().provide(SqlService.class);
+//            sqlService.ifPresent(service -> sql = service);
+        SqlService sql = Sponge.getServiceManager().provide(SqlService.class).get();
+//        }
+//        System.out.println(sql.getConnectionUrlFromAlias(jdbcUrl));
         return sql.getDataSource(jdbcUrl);
     }
 
     public void myMethodThatQueries(String uri, String sql) throws SQLException {
         jdbcUrl = uri;
 
-        System.out.println(uri);
-
         Connection conn = getDataSource(uri).getConnection();
+        try {
+            conn.prepareStatement("SELECT * FROM test").execute();
+        } finally {
+            conn.close();
+        }
 //        PreparedStatement stmt = conn.prepareStatement(sql);
 //        ResultSet results = stmt.executeQuery();
 //        while (results.next()) {
