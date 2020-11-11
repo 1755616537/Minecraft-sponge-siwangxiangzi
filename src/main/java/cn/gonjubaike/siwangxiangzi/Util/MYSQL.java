@@ -32,9 +32,11 @@ public class MYSQL {
         String ssl = mysql.getNode("SSL").getString();
 
         try {
-            myMethodThatQueries("jdbc:mysql://username:password@172.18.0.2:3306/test",
+            myMethodThatQueries("jdbc:mysql://[root[:QD564qw]@]172.18.0.2:3306/test",
                     "SELECT * FROM "+database);
 //            jdbc:<mysql>://[<root>[:<QD564qw>]@]<172.18.0.2:3306 >/<test>
+//            jdbc:mysql://root[:password]@172.18.0.2:3306/test
+//            jdbc:mysql://[root[:QD564qw]@]172.18.0.2:3306/test
         } catch (Exception ignored) {
 //            logger.info("[死亡箱子]插件,数据库连接失败");
             System.out.println(ignored);

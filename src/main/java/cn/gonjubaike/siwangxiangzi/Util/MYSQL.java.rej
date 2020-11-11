@@ -1,0 +1,9 @@
+diff a/src/main/java/cn/gonjubaike/siwangxiangzi/Util/MYSQL.java b/src/main/java/cn/gonjubaike/siwangxiangzi/Util/MYSQL.java	(rejected hunks)
+@@ -32,7 +32,6 @@
+         String ssl = mysql.getNode("SSL").getString();
+ 
+         try {
+-                    + "?&useUnicode=true&characterEncoding=UTF8&useSSL=" + ssl,
+             myMethodThatQueries("jdbc:mysql://QD564qw@172.18.0.2:3306/test",
+                     "SELECT * FROM "+database);
+ //            jdbc:<mysql>://[<root>[:<QD564qw>]@]<172.18.0.2:3306 >/<test>
