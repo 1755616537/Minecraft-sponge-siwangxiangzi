@@ -34,9 +34,6 @@ public class MYSQL {
         try {
             myMethodThatQueries("jdbc:mysql://[root[:QD564qw]@]172.18.0.2:3306/test",
                     "SELECT * FROM "+database);
-//            jdbc:<mysql>://[<root>[:<QD564qw>]@]<172.18.0.2:3306 >/<test>
-//            jdbc:mysql://root[:password]@172.18.0.2:3306/test
-//            jdbc:mysql://[root[:QD564qw]@]172.18.0.2:3306/test
         } catch (Exception ignored) {
 //            logger.info("[死亡箱子]插件,数据库连接失败");
             System.out.println(ignored);
@@ -45,12 +42,12 @@ public class MYSQL {
     }
 
     public javax.sql.DataSource getDataSource(String jdbcUrl) throws SQLException {
-//        if (sql == null) {
-//        Optional<SqlService> sqlService = Sponge.getServiceManager().provide(SqlService.class);
-//            sqlService.ifPresent(service -> sql = service);
-        SqlService sql = Sponge.getServiceManager().provide(SqlService.class).get();
-//        }
-//        System.out.println(sql.getConnectionUrlFromAlias(jdbcUrl));
+        if (sql == null) {
+        Optional<SqlService> sqlService = Sponge.getServiceManager().provide(SqlService.class);
+            sqlService.ifPresent(service -> sql = service);
+//        SqlService sql = Sponge.getServiceManager().provide(SqlService.class).get();
+        }
+        System.out.println(sql.getConnectionUrlFromAlias(jdbcUrl));
         return sql.getDataSource(jdbcUrl);
     }
 
